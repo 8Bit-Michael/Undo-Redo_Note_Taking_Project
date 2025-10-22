@@ -1,5 +1,4 @@
 class NoteApp:
-    
     def __init__(self, undo_stack, redo_stack, notes):
         self.redo_stack = [] # Redo operations
         self.undo_stack = [] # Undo operations
@@ -37,11 +36,18 @@ class NoteApp:
         elif node[0] == 'delete': # if you change your mind and decide to delete something
             self.undo_stack.append(node) # push the action back onto undo stack
 
-    def save_to_file(filename):
-        pass
+    def save_to_file(self, filename):
+        with open(filename, 'w') as f: # Open a file in which you can write
+            for idx in self.notes: # Upload each note
+                f.write(f"{idx}\n") # Write each node into that file
+        return "Notes saved successfully"
 
-    def load_from_file(filename):
-        pass
+    def load_from_file(self, filename):
+        with open(filename, 'r') as f: # This time you're reading from the file
+            loaded_list = [line.strip() for line in f] # Take out the data, strip it, and then make a list
+            self.notes = loaded_list # Assign the loaded list to the notes list
+            self.undo_stack.clear() # Clear the undo stack
+            self.redo_stack.clear() # Clear the redo stack
 
     def show_notes(self):
         for idx, note in enumerate(self.notes): # Loops through the notes with their indexes
@@ -67,6 +73,22 @@ def redo_note_test():
     app.redo() # Redo the last undone note
     app.show_notes()
 
+def save_test():
+    print("=== Test: Save Notes to File ===")
+    result = app.save_to_file("notes.txt") # Save the current notes to a file
+    if result:
+        print(result) # Print the returned message determining whether or not
+        # The notes were uploaded
+    else:
+        print("Failed to save notes.")
+
+def load_test():
+    print("=== Test: Load Notes from File ===")
+    app.load_from_file("notes.txt") # Load notes from the file
+    app.show_notes() # Read through the uploaded list
+
 add_note_test() # Node created should appear
 undo_note_test() # Node should disappear
 redo_note_test() # Node should reappear
+save_test() # Save the current notes to a file
+load_test() # Load notes from the file and display them

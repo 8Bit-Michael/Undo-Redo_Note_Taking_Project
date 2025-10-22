@@ -20,9 +20,9 @@ class NoteApp:
     # from the note stack. The redo stack takes in an action like adding a note back to the
     # note stack.
     def undo(self):
-        node = self.undo_stack.pop() # Assign the popped node to a variable
-        # If the first value in the parameter if you undo that and push it into the redo stack:
-        if node[0] == 'add':
+        node = self.undo_stack.pop() # Assign the popped node from the undo stack to a variable
+        # If the second value in the parameter is 'add':
+        if node[0] == 'add': # Undo that and push it into the redo stack
             self.notes.remove(node[1]) # Remove from the notes list the node index itself.
             self.redo_stack.append(node) # Append the node to the redo_stack
         # If the first value is 'delete' you want to add it back to the notes list
@@ -31,7 +31,11 @@ class NoteApp:
             self.redo_stack.append(node) # Append the node to the redo_stack  
 
     def redo(self):
-        pass
+        node = self.redo_stack.pop() # Erase this node from the redo stack
+        if node[0] == 'add': # If you want to redo adding a node
+            self.notes.append(node) # Add it back to the notes list
+        elif node[0] == 'delete': # if you change your mind and decide to delete something
+            self.undo_stack.append(node) # push the action back onto undo stack
 
     def save_to_file(filename):
         pass
@@ -42,8 +46,10 @@ class NoteApp:
     def show_notes(self):
         for idx, note in enumerate(self.notes): # Loops through the notes with their indexes
             print(f"{idx + 1}: {note}") # Print the numbered notes
+        if not self.notes:
+            print("No notes available")
 
-app = NoteApp() # Initalize the app
+app = NoteApp([], [], []) # Initalize the app, though it's not like your adding features of an object
 
 def add_note_test():
     print("=== Test: Note Initialization ===")
@@ -53,4 +59,14 @@ def add_note_test():
 def undo_note_test():
     print("=== Test: Undo Note ===")
     app.undo() # Undo the last note added
+    # Inserting an index is not necessary, since stacks just push and pop starting at the top
     app.show_notes()
+
+def redo_note_test():
+    print("=== Test: Redo Note ===")
+    app.redo() # Redo the last undone note
+    app.show_notes()
+
+add_note_test() # Node created should appear
+undo_note_test() # Node should disappear
+redo_note_test() # Node should reappear

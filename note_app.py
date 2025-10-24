@@ -112,9 +112,3 @@ def load_test():
     print("=== Test: Load Notes from File ===")
     app.load_from_file("notes.txt") # Load notes from the file
     app.show_notes() # Read through the uploaded list
-
-add_note_test() # Node created should appear
-undo_note_test() # Node should disappear
-redo_note_test() # Node should reappear
-save_test() # Save the current notes to a file
-load_test() # Load notes from the file and display them

@@ -21,7 +21,8 @@ while __name__ == '__main__':
 
         if match_input(command, ['add', '1']):
             note = input("Enter your note: ")
-            app.add_note(note)
+            result = app.add_note(note)
+            print(result)
             app.show_notes()
         
         elif match_input(command, ['delete', '2']):
@@ -61,6 +62,10 @@ while __name__ == '__main__':
             ['add', 'delete', 'undo', 'redo', 'show', 'save', 
              'load', 'exit', '1', '2', '3', '4', '5', '6', '7', '0'])
             if matches:
-                print(f"Did you mean '{matches[0]}'?")
+                command = input(f"Did you mean '{matches[0]}'?")
+                print("Returning to menu...")
+                return
             else:
                 print("Unknown command. Please try again.")
+                return
+
